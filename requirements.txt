@@ -1,0 +1,13 @@
+Django>=5.2.3
+djangorestframework
+django-cors-headers
+python-decouple
+python-dotenv
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary
+twilio
+sendgrid
+requests
+sendgrid==6.10.0
