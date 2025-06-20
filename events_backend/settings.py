@@ -117,7 +117,7 @@ BUSINESS_PHONE_NUMBER = os.getenv('BUSINESS_PHONE_NUMBER')
 
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')  # Set this in your environment variables
 DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'  # Replace with your verified sender email
-BUSINESS_EMAIL = 'business@yourdomain.com'
+BUSINESS_EMAIL = 'swayush.govindwar@gmail.com'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 

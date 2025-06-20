@@ -1,11 +1,15 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from .models import EventInquiry
 from .serializers import EventInquirySerializer
 from .whatsapp_service import WhatsAppService
 from .email_service import EmailService
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -70,10 +74,33 @@ def submit_event_inquiry(request):
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+@csrf_exempt
+@require_http_methods(["GET", "HEAD"])
 def health_check(request):
-    """Simple health check endpoint"""
-    return Response({'status': 'OK', 'message': 'Events API is running'})
+    """Enhanced health check endpoint for uptime monitoring"""
+    try:
+        # Simple database check (optional)
+        inquiry_count = EventInquiry.objects.count()
+        
+        response_data = {
+            'status': 'OK', 
+            'message': 'Events API is running',
+            'timestamp': datetime.now().isoformat(),
+            'total_inquiries': inquiry_count
+        }
+        
+        # Log the ping (optional, for debugging)
+        logger.info("Health check pinged - server is awake")
+        
+        return JsonResponse(response_data, status=200)
+        
+    except Exception as e:
+        logger.error(f"Health check failed: {str(e)}")
+        return JsonResponse({
+            'status': 'ERROR',
+            'message': 'Health check failed',
+            'error': str(e)
+        }, status=500)
 
 @api_view(['POST'])
 def generate_whatsapp_url(request):
